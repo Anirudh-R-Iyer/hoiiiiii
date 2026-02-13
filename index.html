@@ -11,13 +11,14 @@
 <body>
 <div class="scene">
 <div aria-hidden="true" class="starfield"></div>
+<canvas aria-hidden="true" class="fx-canvas" id="fxCanvas"></canvas>
 <div aria-hidden="true" class="moon"></div>
 <div aria-hidden="true" class="hills"></div>
 <div aria-hidden="true" class="petals" id="petals"></div>
 <!-- Easter egg hotspot (hidden-ish): kapi dawara + cup -->
-<button aria-label="kapi dawara and cup" class="kapi-egg" id="kapiEgg">
-<span aria-hidden="true" class="glitter"></span><span aria-hidden="true" class="cup">☕</span>
-<span aria-hidden="true" class="kapi">kapi dawara</span>
+<button aria-label="kapi dawara and cup" class="kapi-moon" id="kapiEgg" title="kapi dawara">
+  <span aria-hidden="true" class="kapi-sparkles"></span>
+  <span aria-hidden="true" class="kapi-sprite" id="kapiSprite"></span>
 </button>
 <div class="center-content">
 <div class="title">A little something... ❤️</div>

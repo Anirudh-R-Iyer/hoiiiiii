@@ -47,6 +47,14 @@ body { -webkit-font-smoothing: none; image-rendering: pixelated; text-rendering:
   mix-blend-mode:screen;
 }
 
+/* Canvas for rose + fireworks */
+.fx-canvas{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
 /* Extra star dots added via JS */
 .star{
   position:absolute;
@@ -142,7 +150,7 @@ body { -webkit-font-smoothing: none; image-rendering: pixelated; text-rendering:
   z-index:2;
 }
 .rose{
-  width:60px; height:80px; transform-origin:center bottom; image-rendering:pixelated;
+  width:78px; height:104px; transform-origin:center bottom; image-rendering:pixelated;
   filter: drop-shadow(0 4px 0 rgba(0,0,0,0.6));
   transition:transform .4s steps(1);
 }
@@ -185,7 +193,9 @@ button.pixel {
   transition:transform .08s steps(1);
 }
 button.pixel:active{ transform:translateY(2px); }
-.hint { font-size:9px; color:#ddd; opacity:0.9; margin-top:10px; }
+.hint { font-size:9px; color:#ddd; opacity:0.9; margin-top:10px; text-align:center; width:100%; }
+
+.modal .hint{ width:100%; text-align:center; }
 
 .scroll-wrap{
   position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
@@ -218,62 +228,61 @@ button.pixel:active{ transform:translateY(2px); }
 .controls { position:fixed; left:12px; bottom:12px; z-index:60; display:flex; gap:8px; align-items:center; }
 .controls button { font-family:inherit; padding:8px 10px; border-radius:6px; border:2px solid #fff2; background:rgba(255,255,255,0.03); color:#fff; cursor:pointer; }
 
-/* Hidden-ish easter egg button */
-
-
-.kapi-egg{
+/* Kapi Dawara sitting on the moon (sprite-like, not a button) */
+.kapi-moon{
   position:absolute;
-  right:8%;
-  top:6%;
-  z-index:75;
-  width:160px;
+  /* offset so it sits on the moon but doesn't make the whole moon feel clickable */
+  right: calc(8% + 18px);
+  top: calc(6% + 18px);
+  z-index:76;
+  width:84px;
   height:84px;
+  background: transparent;
+  border:0;
+  padding:0;
+  cursor:pointer;
   display:flex;
-  flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:6px;
-  border:2px solid rgba(255,255,255,0.35);
-  background: rgba(20,20,30,0.35);
-  color:#fff;
-  font-family:inherit;
-  border-radius:14px;
-  cursor:pointer;
-  opacity:0.92;
-  transform: translate(8px, 10px);
-  box-shadow: 0 0 14px rgba(255,255,255,0.10);
-  overflow:visible;
+  transform: translateZ(0);
 }
-.kapi-egg .cup{ font-size:18px; line-height:1; }
-.kapi-egg .kapi{ font-size:10px; letter-spacing:0.8px; text-transform:lowercase; }
-.kapi-egg:hover{ transform: translate(8px, 10px) translateY(-1px) scale(1.03); }
-.kapi-egg:active{ transform: translate(8px, 10px) translateY(1px) scale(0.99); }
+.kapi-moon:active{ transform: translateY(1px); }
 
-/* Glitter halo around the kaapi dawara */
-.kapi-egg .glitter{
+.kapi-sprite{
+  width:78px;
+  height:78px;
+  image-rendering:pixelated;
+  filter: drop-shadow(0 3px 0 rgba(0,0,0,0.45));
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain;
+  /* pixel-art door + cup */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' shape-rendering='crispEdges'><rect width='80' height='80' fill='none'/><g><rect x='18' y='24' width='44' height='46' fill='%23251a35'/><rect x='22' y='28' width='36' height='38' fill='%23331f4a'/><rect x='22' y='28' width='36' height='6' fill='%234a2a6a'/><rect x='28' y='40' width='24' height='22' fill='%232a163f'/><rect x='46' y='50' width='4' height='4' fill='%23ffd166'/><rect x='20' y='22' width='40' height='4' fill='%23ff5c8a'/><rect x='18' y='24' width='4' height='46' fill='%23ff5c8a'/><rect x='58' y='24' width='4' height='46' fill='%23ff5c8a'/><rect x='18' y='68' width='44' height='4' fill='%23ff5c8a'/></g><g><rect x='50' y='18' width='18' height='12' rx='2' fill='%23ffffff' opacity='0.9'/><rect x='52' y='20' width='14' height='8' rx='2' fill='%23dfe7ff' opacity='0.9'/><rect x='66' y='22' width='6' height='6' rx='3' fill='none' stroke='%23ffffff' stroke-width='3' opacity='0.85'/><rect x='54' y='23' width='6' height='3' fill='%23c98b3a' opacity='0.9'/></g></svg>");
+}
+
+/* Glitter around the sprite so it's obvious */
+.kapi-sparkles{
   position:absolute;
-  inset:-22px;
+  inset:-10px;
   pointer-events:none;
-  border-radius:22px;
+  border-radius:999px;
   background-image:
-    radial-gradient(circle at 12% 28%, rgba(255,255,255,0.95) 0 1px, rgba(255,255,255,0) 2px),
-    radial-gradient(circle at 78% 20%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px),
-    radial-gradient(circle at 60% 78%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 18% 28%, rgba(255,255,255,0.95) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 62% 78%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px),
     radial-gradient(circle at 22% 74%, rgba(255,255,255,0.90) 0 1px, rgba(255,255,255,0) 2px),
     radial-gradient(circle at 92% 62%, rgba(255,255,255,0.75) 0 1px, rgba(255,255,255,0) 2px),
-    radial-gradient(circle at 42% 12%, rgba(255,255,255,0.80) 0 1px, rgba(255,255,255,0) 2px),
-    radial-gradient(circle at 8% 58%, rgba(255,255,255,0.70) 0 1px, rgba(255,255,255,0) 2px),
-    radial-gradient(circle at 70% 44%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px);
-  filter: drop-shadow(0 0 8px rgba(255,255,255,0.22));
-  opacity:0.9;
+    radial-gradient(circle at 48% 14%, rgba(255,255,255,0.80) 0 1px, rgba(255,255,255,0) 2px);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.18));
+  opacity:0.88;
   animation: glitterTwinkle 1.6s steps(2) infinite;
 }
-.kapi-egg .glitter::before,
-.kapi-egg .glitter::after{
+.kapi-sparkles::before,
+.kapi-sparkles::after{
   content:"";
   position:absolute;
   inset:0;
-  border-radius:22px;
+  border-radius:999px;
   background-image:
     radial-gradient(circle at 30% 40%, rgba(255,255,255,0.90) 0 1px, rgba(255,255,255,0) 2px),
     radial-gradient(circle at 84% 38%, rgba(255,255,255,0.70) 0 1px, rgba(255,255,255,0) 2px),
@@ -282,7 +291,7 @@ button.pixel:active{ transform:translateY(2px); }
   opacity:0.65;
   animation: glitterTwinkle 1.9s steps(2) infinite reverse;
 }
-.kapi-egg .glitter::after{
+.kapi-sparkles::after{
   opacity:0.5;
   transform: rotate(12deg);
 }
@@ -402,7 +411,9 @@ button.pixel:active{ transform:translateY(2px); }
 
 @media (max-width:520px){
   .moon{ width:80px;height:80px; right:6%; top:6%;}
-  .rose{ width:44px; height:62px;}
+  .rose{ width:56px; height:74px;}
+  .kapi-moon{ width:60px; height:60px; right: calc(6% + 12px); top: calc(6% + 12px); }
+  .kapi-sprite{ width:48px; height:48px; }
   .title { font-size:12px }
   .modal { min-width:240px; padding:16px; }
   .scroll { padding:20px; font-size:11px; }
@@ -416,4 +427,4 @@ button.pixel:active{ transform:translateY(2px); }
   60%{ transform: translateX(-3px); }
   80%{ transform: translateX(3px); }
 }
-.ask-modal.shake{ animation: shake .35s steps(2) 0s 3; }
+.modal.shake{ animation: shake .35s steps(2) 0s 3; }

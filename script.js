@@ -48,12 +48,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
   ];
 
   // MORE flowers blooming 🌸🌼🌷
-  const flowerCount = Math.max(12, Math.floor(window.innerWidth / 85));
+  const flowerCount = Math.max(10, Math.floor(window.innerWidth / 110));
   for(let i=0;i<flowerCount;i++){
     const pal = flowerPalettes[Math.floor(Math.random()*flowerPalettes.length)];
     const wrapper = document.createElement('div');
     wrapper.className = 'rose';
-    wrapper.style.transform = `translateY(${10 + Math.random()*12}px) scale(${0.75 + Math.random()*0.45})`;
+    // Bigger flowers 🌸
+    wrapper.style.transform = `translateY(${6 + Math.random()*10}px) scale(${1.05 + Math.random()*0.65})`;
     wrapper.style.opacity = 0.95;
     wrapper.innerHTML = flowerSVG(pal);
     garden.appendChild(wrapper);
@@ -104,6 +105,154 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
   }
   seedPetals(320);
+
+  /* -------------------------
+     Fourier-ish rose (animated) + fireworks (canvas)
+     ------------------------- */
+  const fxCanvas = document.getElementById('fxCanvas');
+  const ctx = fxCanvas ? fxCanvas.getContext('2d') : null;
+
+  let dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+  function resizeFx(){
+    if(!ctx) return;
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    fxCanvas.width = Math.floor(window.innerWidth * dpr);
+    fxCanvas.height = Math.floor(window.innerHeight * dpr);
+    fxCanvas.style.width = window.innerWidth + 'px';
+    fxCanvas.style.height = window.innerHeight + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeFx();
+  window.addEventListener('resize', resizeFx);
+
+  // Fourier series style parametric curve that resembles a rose
+  // x(t)=Σ a_n cos(n t + φ), y(t)=Σ b_n sin(n t + φ)
+  const A = [0, 120, 38, 14, 7];
+  const B = [0, 92, 34, 18, 6];
+  const PH = [0, 0.0, 0.6, 1.1, 1.7];
+
+  function rosePoint(t, phase){
+    let x = 0, y = 0;
+    for(let n=1; n<A.length; n++){
+      x += A[n] * Math.cos(n*t + phase + PH[n]);
+      y += B[n] * Math.sin(n*t + phase*0.85 + PH[n]*0.7);
+    }
+    return {x, y};
+  }
+
+  // Fireworks particles
+  const bursts = [];
+  function spawnFirework(){
+    if(!ctx) return;
+    // keep them in the sky area
+    const x = window.innerWidth * (0.15 + Math.random()*0.7);
+    const y = window.innerHeight * (0.10 + Math.random()*0.35);
+    const count = 28 + Math.floor(Math.random()*26);
+    const life = 55 + Math.floor(Math.random()*25);
+    const parts = [];
+    for(let i=0;i<count;i++){
+      const a = (i/count) * Math.PI*2;
+      const sp = 1.2 + Math.random()*2.2;
+      parts.push({
+        x, y,
+        vx: Math.cos(a) * sp,
+        vy: Math.sin(a) * sp,
+        t: 0,
+        life
+      });
+    }
+    bursts.push(parts);
+  }
+
+  let nextFirework = performance.now() + 900;
+
+  let t0 = performance.now();
+  function drawFx(now){
+    if(!ctx) return;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const dt = Math.min(48, now - t0);
+    t0 = now;
+
+    ctx.clearRect(0,0,w,h);
+
+    // Rose in the background (behind hills/flowers visually due to z-index)
+    const cx = w*0.38;
+    const cy = h*0.56;
+    const phase = now * 0.00025;
+    const scale = Math.min(w,h) / 520;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(scale, scale);
+    ctx.globalAlpha = 0.18;
+    ctx.lineWidth = 2;
+    ctx.globalCompositeOperation = 'screen';
+    ctx.beginPath();
+    const steps = 900;
+    for(let i=0;i<=steps;i++){
+      const t = (i/steps) * Math.PI*2;
+      const p = rosePoint(t, phase);
+      const xx = p.x * 0.85;
+      const yy = p.y * 0.85;
+      if(i===0) ctx.moveTo(xx, yy);
+      else ctx.lineTo(xx, yy);
+    }
+    ctx.strokeStyle = 'rgba(255,92,138,0.9)';
+    ctx.stroke();
+
+    // inner highlight
+    ctx.globalAlpha = 0.10;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for(let i=0;i<=steps;i++){
+      const t = (i/steps) * Math.PI*2;
+      const p = rosePoint(t, phase + 1.2);
+      const xx = p.x * 0.64;
+      const yy = p.y * 0.64;
+      if(i===0) ctx.moveTo(xx, yy);
+      else ctx.lineTo(xx, yy);
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+    ctx.stroke();
+    ctx.restore();
+
+    // Fireworks
+    if(now > nextFirework){
+      spawnFirework();
+      nextFirework = now + (900 + Math.random()*1400);
+    }
+
+    ctx.globalCompositeOperation = 'lighter';
+    for(let b=bursts.length-1; b>=0; b--){
+      const parts = bursts[b];
+      let alive = 0;
+      for(const p of parts){
+        p.t += dt;
+        const k = p.t / (p.life*16);
+        if(k>=1) continue;
+        alive++;
+        // simple drag + gravity
+        p.vx *= 0.985;
+        p.vy = p.vy*0.985 + 0.02;
+        p.x += p.vx * (dt/16);
+        p.y += p.vy * (dt/16);
+        const alpha = Math.max(0, 1 - k);
+        ctx.globalAlpha = alpha*0.65;
+        ctx.fillStyle = 'rgba(255,255,255,1)';
+        ctx.fillRect(p.x, p.y, 2, 2);
+        ctx.globalAlpha = alpha*0.28;
+        ctx.fillStyle = 'rgba(255,92,138,1)';
+        ctx.fillRect(p.x+1, p.y+1, 2, 2);
+      }
+      if(alive===0) bursts.splice(b,1);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+
+    requestAnimationFrame(drawFx);
+  }
+  if(ctx) requestAnimationFrame(drawFx);
 
   const askModal = document.getElementById('askModal');
   const yesBtn = document.getElementById('yesBtn');
