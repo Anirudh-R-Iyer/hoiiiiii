@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Will you be my Valentine?</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="scene">
+  <div class="starfield" aria-hidden="true"></div>
+  <div class="moon" aria-hidden="true"></div>
+
+  <div class="center-content">
+    <div class="title">A little something... ❤️</div>
+    <div class="sub">(tap the question to begin)</div>
+  </div>
+
+  <div class="garden" id="garden"></div>
+
+  <div class="modal" id="askModal" role="dialog" aria-modal="true" aria-labelledby="q">
+    <div class="question" id="q">Will you be my Valentine?</div>
+    <div class="buttons">
+      <button class="pixel" id="yesBtn">YES</button>
+      <button class="pixel" id="noBtn">NO</button>
+    </div>
+    <div class="hint">(press yes for a surprise)</div>
+  </div>
+
+  <div class="scroll-wrap" id="scrollWrap" role="dialog" aria-modal="true">
+    <div class="scroll" id="scroll">
+      <div id="typed" class="typewriter" aria-live="polite"></div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="pixel" id="closeScroll">Close</button>
+      <button class="pixel" id="restart">Restart</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="muteBtn">Mute music</button>
+  </div>
+</div>
+
+<!-- Audio: put the chiptune.wav into assets/chiptune.wav in your repo -->
+<audio id="bgAudio" src="assets/chiptune.wav" loop preload="auto"></audio>
+
+<script src="script.js"></script>
+</body>
+</html>
