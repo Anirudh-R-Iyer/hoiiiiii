@@ -11,19 +11,11 @@
 <body>
 <div class="scene">
 <div aria-hidden="true" class="starfield"></div>
-<canvas aria-hidden="true" class="fx-canvas" id="fxCanvas"></canvas>
-<div aria-hidden="true" class="moon">
-  <!-- Easter egg on the moon: kapi dawara + cup -->
-  <div id="kapiEgg" class="kapi-dawara" role="button" tabindex="0" aria-label="kapi dawara and cup" title="kapi dawara">
-    <span aria-hidden="true" class="kapi-sparkles"></span>
-    <span aria-hidden="true" class="kapi-sprite" id="kapiSprite"></span>
-  </div>
-</div>
+<div aria-hidden="true" class="moon"></div>
 <div aria-hidden="true" class="hills"></div>
 <div aria-hidden="true" class="petals" id="petals"></div>
+<!-- Kapi Dawara button will appear after the message finishes typing -->
 <div class="center-content">
-<div class="title">A little something... ❤️</div>
-<div class="sub">(tap the question to begin)</div>
 </div>
 <div class="garden" id="garden"></div>
 <div aria-labelledby="q" aria-modal="true" class="modal" id="askModal" role="dialog">
@@ -42,6 +34,9 @@
 <button class="pixel" id="closeScroll">Close</button>
 <button class="pixel" id="restart">Restart</button>
 </div>
+
+<!-- Hidden until the message finishes typing -->
+<button class="pixel" id="kapiBtn" style="display:none;">Open Kapi Dawara</button>
 </div>
 <div class="controls">
 <button id="muteBtn">Mute music</button>
