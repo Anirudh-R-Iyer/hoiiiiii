@@ -383,6 +383,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
      ------------------------- */
 
   const kapiEgg = document.getElementById('kapiEgg');
+kapiEgg.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); kapiEgg.click(); } });
   const montage = document.getElementById('montage');
   const montageGrid = document.getElementById('montageGrid');
   const kapiShelf = document.getElementById('kapiShelf');
