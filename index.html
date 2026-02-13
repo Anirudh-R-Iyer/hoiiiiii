@@ -1,54 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
 <title>Will you be my Valentine?</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
 </head>
 <body>
-
 <div class="scene">
-  <div class="starfield" aria-hidden="true"></div>
-  <div class="moon" aria-hidden="true"></div>
-
-  <div class="center-content">
-    <div class="title">A little something... ❤️</div>
-    <div class="sub">(tap the question to begin)</div>
-  </div>
-
-  <div class="garden" id="garden"></div>
-
-  <div class="modal" id="askModal" role="dialog" aria-modal="true" aria-labelledby="q">
-    <div class="question" id="q">Will you be my Valentine?</div>
-    <div class="buttons">
-      <button class="pixel" id="yesBtn">YES</button>
-      <button class="pixel" id="noBtn">NO</button>
-    </div>
-    <div class="hint">(press yes for a surprise)</div>
-  </div>
-
-  <div class="scroll-wrap" id="scrollWrap" role="dialog" aria-modal="true">
-    <div class="scroll" id="scroll">
-      <div id="typed" class="typewriter" aria-live="polite"></div>
-    </div>
-    <div style="display:flex;gap:8px;">
-      <button class="pixel" id="closeScroll">Close</button>
-      <button class="pixel" id="restart">Restart</button>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button id="muteBtn">Mute music</button>
-  </div>
+<div aria-hidden="true" class="starfield"></div>
+<div aria-hidden="true" class="moon"></div>
+<div aria-hidden="true" class="hills"></div>
+<div aria-hidden="true" class="petals" id="petals"></div>
+<!-- Easter egg hotspot (hidden-ish): kapi dawara + cup -->
+<button aria-label="kapi dawara and cup" class="kapi-egg" id="kapiEgg">
+<span aria-hidden="true" class="glitter"></span><span aria-hidden="true" class="cup">☕</span>
+<span aria-hidden="true" class="kapi">kapi dawara</span>
+</button>
+<div class="center-content">
+<div class="title">A little something... ❤️</div>
+<div class="sub">(tap the question to begin)</div>
 </div>
-
+<div class="garden" id="garden"></div>
+<div aria-labelledby="q" aria-modal="true" class="modal" id="askModal" role="dialog">
+<div class="question" id="q">Will you be my Valentine?</div>
+<div class="buttons">
+<button class="pixel" id="yesBtn">YES</button>
+<button class="pixel" id="noBtn">NO</button>
+</div>
+<div class="hint">(press yes for a surprise)</div>
+</div>
+<div aria-modal="true" class="scroll-wrap" id="scrollWrap" role="dialog">
+<div class="scroll" id="scroll">
+<div aria-live="polite" class="typewriter" id="typed"></div>
+</div>
+<div style="display:flex;gap:8px;">
+<button class="pixel" id="closeScroll">Close</button>
+<button class="pixel" id="restart">Restart</button>
+</div>
+</div>
+<div class="controls">
+<button id="muteBtn">Mute music</button>
+</div>
+<!-- Montage / Kapi Dawara Drawer -->
+<div aria-label="kapi dawara montage" aria-modal="true" class="montage" id="montage" role="dialog">
+<div class="montage-card">
+<div class="montage-head">
+<div class="montage-title">✨ Kapi Dawara ✨</div>
+<div class="montage-actions">
+<label class="pixel file-btn">
+            Add photos
+            <input accept="image/*" hidden="" id="addPhotos" multiple="" type="file"/>
+</label>
+<button class="pixel" id="closeMontage">Close</button>
+</div>
+</div>
+<div class="montage-sub">
+        Click any moment to store it in the <b>kapi dawara</b>.
+      </div>
+<div class="montage-body">
+<div aria-label="moments collage" class="montage-grid" id="montageGrid"></div>
+<div aria-label="kapi dawara drawer" class="kapi-drawer">
+<div class="drawer-title">🗄️ kapi dawara</div>
+<div class="drawer-grid" id="kapiShelf"></div>
+<button class="pixel" id="clearKapi" title="Clears only this device">Clear drawer</button>
+</div>
+</div>
+</div>
+</div>
+</div>
 <!-- Audio: put the chiptune.wav into assets/chiptune.wav in your repo -->
-<audio id="bgAudio" src="assets/chiptune.wav" loop preload="auto"></audio>
-
+<audio id="bgAudio" loop="" preload="auto" src="assets/chiptune.wav"></audio>
+<audio id="victoryAudio" preload="auto" src="assets/victory.wav"></audio>
 <script src="script.js"></script>
 </body>
 </html>

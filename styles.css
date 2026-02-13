@@ -17,6 +17,21 @@ body { -webkit-font-smoothing: none; image-rendering: pixelated; text-rendering:
   justify-content:center;
 }
 
+/* Easter egg filter */
+.scene.kapi-filter{
+  filter: saturate(1.25) contrast(1.05);
+}
+.scene.kapi-filter::after{
+  content:"";
+  position:absolute; inset:-20px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.10), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(255,122,168,0.10), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.25));
+  pointer-events:none;
+  mix-blend-mode:screen;
+}
+
 .starfield{
   position:absolute; inset:0; pointer-events:none;
   background-image:
@@ -30,6 +45,21 @@ body { -webkit-font-smoothing: none; image-rendering: pixelated; text-rendering:
   animation: twinkle 3s infinite linear;
   opacity:0.95;
   mix-blend-mode:screen;
+}
+
+/* Extra star dots added via JS */
+.star{
+  position:absolute;
+  width:2px;height:2px;
+  background:#fff;
+  opacity:0.9;
+  transform: translateZ(0);
+  animation: starFlicker var(--tw, 3.2s) infinite steps(2);
+}
+@keyframes starFlicker{
+  0%{opacity:0.2; transform:scale(1)}
+  50%{opacity:1; transform:scale(1.6)}
+  100%{opacity:0.25; transform:scale(1)}
 }
 @keyframes twinkle{
   0%{filter:brightness(1) saturate(1)}
@@ -47,6 +77,61 @@ body { -webkit-font-smoothing: none; image-rendering: pixelated; text-rendering:
   box-shadow:0 0 30px rgba(255,255,255,0.08);
   transform:translateZ(0);
 }
+
+/* Hills background */
+.hills{
+  position:absolute; left:0; right:0; bottom:0;
+  height:42vh;
+  pointer-events:none;
+  z-index:1;
+  background:
+    radial-gradient(120% 90% at 15% 120%, rgba(40,190,120,0.16) 0%, rgba(0,0,0,0) 55%),
+    radial-gradient(120% 90% at 55% 125%, rgba(80,240,170,0.14) 0%, rgba(0,0,0,0) 58%),
+    radial-gradient(120% 90% at 95% 120%, rgba(40,170,120,0.14) 0%, rgba(0,0,0,0) 55%),
+    linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.55) 100%);
+}
+.hills::before,
+.hills::after{
+  content:"";
+  position:absolute; left:-10%; right:-10%; bottom:-6%;
+  height:65%;
+  background:
+    radial-gradient(80% 120% at 20% 100%, rgba(28,120,78,0.55) 0%, rgba(28,120,78,0.55) 45%, rgba(0,0,0,0) 60%),
+    radial-gradient(90% 120% at 55% 100%, rgba(22,92,60,0.55) 0%, rgba(22,92,60,0.55) 48%, rgba(0,0,0,0) 63%),
+    radial-gradient(80% 120% at 85% 100%, rgba(16,72,48,0.55) 0%, rgba(16,72,48,0.55) 45%, rgba(0,0,0,0) 60%);
+  filter: blur(0.5px);
+  opacity:0.95;
+}
+.hills::after{
+  bottom:-10%;
+  height:55%;
+  opacity:0.8;
+  transform: scaleX(1.06);
+  filter: blur(1px);
+}
+
+/* Falling petals */
+.petals{ position:absolute; inset:0; pointer-events:none; z-index:6; }
+.petal{
+  position:absolute;
+  top:-10vh;
+  width:8px; height:6px;
+  background: rgba(255, 116, 170, 0.95);
+  border-radius: 70% 30% 70% 30%;
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,0.25));
+  transform: rotate(var(--r, 0deg));
+  opacity: var(--o, 0.9);
+  animation:
+    petalFall var(--d, 8s) linear infinite,
+    petalSway var(--s, 2.8s) ease-in-out infinite,
+    petalSpin var(--p, 2.6s) linear infinite;
+}
+@keyframes petalFall{
+  0%{ transform: translateY(-10vh) translateX(0) rotate(var(--r,0deg)); }
+  100%{ transform: translateY(110vh) translateX(var(--x, 30px)) rotate(calc(var(--r,0deg) + 220deg)); }
+}
+@keyframes petalSway{ 0%,100%{ margin-left:-10px } 50%{ margin-left:10px } }
+@keyframes petalSpin{ 0%{ filter: drop-shadow(0 2px 0 rgba(0,0,0,0.25)); } 50%{ filter: drop-shadow(0 3px 0 rgba(0,0,0,0.35)); } }
 .moon::after{
   content:"";
   position:absolute; left:60%; top:30%; width:28px; height:28px; background:rgba(0,0,0,0.12); border-radius:50%;
@@ -133,6 +218,188 @@ button.pixel:active{ transform:translateY(2px); }
 .controls { position:fixed; left:12px; bottom:12px; z-index:60; display:flex; gap:8px; align-items:center; }
 .controls button { font-family:inherit; padding:8px 10px; border-radius:6px; border:2px solid #fff2; background:rgba(255,255,255,0.03); color:#fff; cursor:pointer; }
 
+/* Hidden-ish easter egg button */
+
+
+.kapi-egg{
+  position:absolute;
+  right:8%;
+  top:6%;
+  z-index:75;
+  width:160px;
+  height:84px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border:2px solid rgba(255,255,255,0.35);
+  background: rgba(20,20,30,0.35);
+  color:#fff;
+  font-family:inherit;
+  border-radius:14px;
+  cursor:pointer;
+  opacity:0.92;
+  transform: translate(8px, 10px);
+  box-shadow: 0 0 14px rgba(255,255,255,0.10);
+  overflow:visible;
+}
+.kapi-egg .cup{ font-size:18px; line-height:1; }
+.kapi-egg .kapi{ font-size:10px; letter-spacing:0.8px; text-transform:lowercase; }
+.kapi-egg:hover{ transform: translate(8px, 10px) translateY(-1px) scale(1.03); }
+.kapi-egg:active{ transform: translate(8px, 10px) translateY(1px) scale(0.99); }
+
+/* Glitter halo around the kaapi dawara */
+.kapi-egg .glitter{
+  position:absolute;
+  inset:-22px;
+  pointer-events:none;
+  border-radius:22px;
+  background-image:
+    radial-gradient(circle at 12% 28%, rgba(255,255,255,0.95) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 78% 20%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 60% 78%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 22% 74%, rgba(255,255,255,0.90) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 92% 62%, rgba(255,255,255,0.75) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 42% 12%, rgba(255,255,255,0.80) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 8% 58%, rgba(255,255,255,0.70) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 70% 44%, rgba(255,255,255,0.85) 0 1px, rgba(255,255,255,0) 2px);
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.22));
+  opacity:0.9;
+  animation: glitterTwinkle 1.6s steps(2) infinite;
+}
+.kapi-egg .glitter::before,
+.kapi-egg .glitter::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  background-image:
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.90) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 84% 38%, rgba(255,255,255,0.70) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 52% 88%, rgba(255,255,255,0.82) 0 1px, rgba(255,255,255,0) 2px),
+    radial-gradient(circle at 18% 16%, rgba(255,255,255,0.78) 0 1px, rgba(255,255,255,0) 2px);
+  opacity:0.65;
+  animation: glitterTwinkle 1.9s steps(2) infinite reverse;
+}
+.kapi-egg .glitter::after{
+  opacity:0.5;
+  transform: rotate(12deg);
+}
+
+@keyframes glitterTwinkle{
+  0%{ opacity:0.85; transform: translateY(0px) scale(1); }
+  50%{ opacity:0.55; transform: translateY(-1px) scale(1.02); }
+  100%{ opacity:0.9; transform: translateY(0px) scale(1); }
+}
+
+
+/* Montage overlay */
+.montage{
+  position:fixed; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.65), rgba(0,0,0,0.88));
+  z-index:80;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  visibility:hidden;
+  opacity:0;
+  transition: opacity .25s ease;
+}
+.montage.show{ visibility:visible; opacity:1; }
+.montage-card{
+  width:min(1100px, 98%);
+  max-height:90vh;
+  overflow:hidden;
+  border-radius:14px;
+  border:4px solid rgba(255,255,255,0.10);
+  background: rgba(18,14,38,0.82);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 70px rgba(0,0,0,0.7);
+}
+.montage-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 14px 10px;
+  border-bottom:2px solid rgba(255,255,255,0.07);
+}
+.montage-title{ color:var(--accent); font-size:12px; }
+.montage-actions{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.file-btn{ display:inline-flex; align-items:center; justify-content:center; }
+.montage-sub{
+  padding:10px 14px;
+  font-size:10px;
+  color:#e9e9e9;
+  border-bottom:2px solid rgba(255,255,255,0.05);
+}
+.montage-body{
+  display:grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap:14px;
+  padding:14px;
+  max-height: calc(90vh - 120px);
+  overflow:auto;
+}
+.montage-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap:10px;
+}
+.moment{
+  position:relative;
+  border-radius:12px;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,0.10);
+  cursor:pointer;
+  background: rgba(255,255,255,0.04);
+  min-height:110px;
+}
+.moment img{ width:100%; height:100%; object-fit:cover; display:block; image-rendering:auto; }
+.moment::after{
+  content:"click to store";
+  position:absolute; left:8px; bottom:8px;
+  font-size:8px;
+  padding:4px 6px;
+  border-radius:8px;
+  background: rgba(0,0,0,0.55);
+  border:1px solid rgba(255,255,255,0.12);
+  opacity:0;
+  transition: opacity .15s ease;
+}
+.moment:hover::after{ opacity:1; }
+.moment.pop{ animation: pop 0.35s steps(2); }
+@keyframes pop{ 0%{ transform: scale(1) } 50%{ transform: scale(1.04) } 100%{ transform: scale(1) } }
+
+.kapi-drawer{
+  border:3px dashed rgba(255,255,255,0.18);
+  border-radius:14px;
+  padding:10px;
+  background: rgba(0,0,0,0.18);
+}
+.drawer-title{ font-size:10px; color:#fff; margin-bottom:10px; }
+.drawer-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap:8px;
+  min-height:120px;
+}
+.drawer-grid .slot{
+  border-radius:10px;
+  overflow:hidden;
+  border:2px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  aspect-ratio: 1 / 1;
+}
+.drawer-grid .slot img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+@media (max-width:900px){
+  .montage-body{ grid-template-columns: 1fr; }
+  .drawer-grid{ grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
 @media (max-width:520px){
   .moon{ width:80px;height:80px; right:6%; top:6%;}
   .rose{ width:44px; height:62px;}
@@ -140,3 +407,13 @@ button.pixel:active{ transform:translateY(2px); }
   .modal { min-width:240px; padding:16px; }
   .scroll { padding:20px; font-size:11px; }
 }
+
+
+@keyframes shake{
+  0%,100%{ transform: translateX(0); }
+  20%{ transform: translateX(-4px); }
+  40%{ transform: translateX(4px); }
+  60%{ transform: translateX(-3px); }
+  80%{ transform: translateX(3px); }
+}
+.ask-modal.shake{ animation: shake .35s steps(2) 0s 3; }
