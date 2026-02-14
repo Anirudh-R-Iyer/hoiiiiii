@@ -1,14 +1,20 @@
 /* -------------------------
    CONFIG: Replace your message here.
    ------------------------- */
-const LOVE_MESSAGE = `My dearest love,
+const LOVE_MESSAGE = `Hii my loveee, happy valentines dayyy!!! This is our FIRST VALENTINES DAY AS AN OFFICIAL COUPLEEE YAYAYAYAYAYAYAYAYAYAYYYY
 
-On this day I want to tell you just how much you mean to me. You are the dawn in my darkest night, the laughter in my quietest hour, and the home my heart always finds.
+I love you sooo freaking much bebbe. Thank you sooo much for being there by my side, and being the backbone of my life and joy. The past 2 years have been magical bebbe, like you brought so much happiness, and more than that; you brought purpose to my life. Being in love with you is the most wonderful thing that has ever happened to me, I am damn lucky to have found you bebbe. And to think that all of this happend because of some range thingy on hinge is ABSOLUTELY CRAZY. You bet I am emo typing this out rn😭 I am sending you soooo many hugs and kissies rnn babyyy UMMMMMAAAAAAAA
 
-Every moment with you is an adventure I'm grateful to share. Will you continue to be my partner in all the small, silly, grand and tender things that make us -- us?
+You're breathtakingly amazing bebbee♥️,
 
-Forever yours,
-[Your Name]
+You are like nectar to my life, the petals to my heart. There isn't any amount of flowers in the world that would be enough to express how much I love youu. This website is the container which holds all my love for you babyyy, I hope you enjoy the flowers and the stars in this websiteee🥰
+
+I love you with every atom that make me. Happy Valentines AND (almost) 8 months♥️😘
+
+I have made some bisi bisi kaapi for youu (Just a lil different hehe)
+
+WITH SOOOOO MUCH LOVEEE,
+Aniiii :))
 `;
 
 /* -------------------------
@@ -258,11 +264,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   // Keep the default grid small (4–5 moments by default)
   const builtInMoments = [
-    'assets/moments/1.jpg',
+    'assets/moments/1.jpeg',
     'assets/moments/2.jpg',
-    svgMoment('our first quest', '💖'),
-    svgMoment('stargazing', '✨'),
-    svgMoment('cozy cafe', '☕'),
+    'assets/moments/3.jpeg',
+    'assets/moments/4.jpeg',
+    'assets/moments/5.jpg',
   ];
 
   function svgMoment(label, emoji){
